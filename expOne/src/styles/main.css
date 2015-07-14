@@ -1,3 +1,22 @@
 .class {
 background:#ffffff;
 }
+
+.navbar-1 {
+    background-color:#222222;border-color:#333333;
+}
+.navbar-brand .vin-logo {
+    margin-top:6px;height:30px;
+}
+.dropdown-toggle.dd-user-group {
+    padding:10px 22px;
+}
+#subnav1 {display:none;}
+#subnav2 {display:none;}
+#subnav3 {display:none;}
+#subnav4 {display:none;}
+#subnav5 {display:none;}
+
+
+.w-donut-img {text-align:center;padding:8px;}
+.w-donut-img img {height:85px;}

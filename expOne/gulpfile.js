@@ -5,16 +5,16 @@
     var source = require('vinyl-source-stream');
     var clean = require('gulp-clean');
     var sass = require('gulp-sass');
-    var react = require('gulp-react');
     var browserify = require('browserify');
     var reactify = require('reactify');
+    var concat = require('gulp-concat');
 
     var config = {
         paths: {
-            browserifyEntry: '',
-            dist: '',
-            jsSources: ['./src/app/**/*.js'],
-            styleSources: ['./src/styles/*.scss']
+            browserifyEntry: './src/app/app.js',
+            dist: './dist',
+            jsSources: ['./src/app/**/*.js','./src/app/**/*/*.js'],
+            styleSources: ['./src/styles/*.scss','./src/styles/*.css']
         }
     };
     
@@ -34,6 +34,16 @@
             .pipe(gulp.dest(config.paths.dist)); 
     });
     
+    //Move
+    gulp.task('move', function(){
+        gulp.src('./img/**/*', {base: './'})
+            .pipe(gulp.dest(config.paths.dist));
+        gulp.src('./src/libs/*', {base: './src'})
+            .pipe(gulp.dest(config.paths.dist));
+        gulp.src('index.html', {base: './'})
+            .pipe(gulp.dest(config.paths.dist));
+    });
+
     //Browserify
     gulp.task('browserify', function() {
         browserify(config.paths.browserifyEntry)
@@ -51,6 +61,6 @@
     });
 
     //Default
-    gulp.task('default', ['clean', 'browserify', 'sass', 'watch']);
+    gulp.task('default', ['browserify', 'sass', 'move', 'watch']);
 
 }());
