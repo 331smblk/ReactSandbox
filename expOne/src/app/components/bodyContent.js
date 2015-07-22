@@ -1,7 +1,9 @@
 'use strict';
 
 var React = require('react');
-var SideBar = require('./sideBar');
+var _ = require('lodash');
+var RouteHandler = require('react-router').RouteHandler;
+
 var PageContentTop = require('./pageContentTop');
 
 var BodyContent = React.createClass({
@@ -9,10 +11,8 @@ var BodyContent = React.createClass({
     render: function() {
         return (
             
-            <div className="container-fluid">
-                <SideBar />
-                <PageContentTop />
-                <hr />
+            <div id="page-content-wrapper">
+                <RouteHandler/>
             </div>
             
         );

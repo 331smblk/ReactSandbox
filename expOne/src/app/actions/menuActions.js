@@ -9,6 +9,12 @@ module.exports = {
         dispatcher.dispatch({
             actionType: constants.eventNames.INITIALIZE_APPLICATION
         });
+    },
+    sideNavToggle: function() {
+        dispatcher.dispatch({
+            actionType: constants.eventNames.SIDE_NAV_TOGGLE
+        });
+
     }
 };
 

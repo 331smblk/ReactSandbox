@@ -1,12 +1,33 @@
-'use strict';
+// Main Component pages (check to refactor later)
+var CRMMain = require('./crm/crmMain');
+var CampaignMain = require('./campaign/campaignMain');
+var DeskingMain = require('./desking/deskingMain');
+var InventoryMain = require('./inventory/inventoryMain');
+var ReportingMain = require('./reporting/reportingMain');
+var ServiceMain = require('./service/serviceMain');
+var WebsitesMain = require('./websites/websitesMain');
 
-var React = require('react');
 
-var SideBar = React.createClass({
 
-    render: function() {
-        return (
-            <div id="sidebar-wrapper">
+                           
+
+<Route name="manageAuthor" path="author/:id" handler={require('./components/authors/manageAuthorPage')} />
+
+<Route name="manageCourse" path="course/:slug" handler={require('./components/courses/manageCoursePage')} />
+
+
+<NotFoundRoute handler={require('./components/notFoundPage')}/>
+
+//Here is a redirect
+//note that adding the slash and asterisk cause anything after the
+//slash to redirect.
+<Redirect from="about-us/*" to="about" />
+
+                            
+                        
+                        
+                        
+<div id="sidebar-wrapper">
                 <ul className="sidebar-nav" id="sidebar-subnav">
                     <li>
                         <a href="#" data-target="#subnav1">Manager</a>
@@ -57,9 +78,4 @@ var SideBar = React.createClass({
                         <a href="index.html?Report=NewReports.ChartGallery">Gallery</a>
                     </li>                    
                 </ul>
-            </div>
-        );
-    }
-});
-
-module.exports = SideBar;
+            </div>                        

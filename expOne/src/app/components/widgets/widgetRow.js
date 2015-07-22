@@ -12,7 +12,8 @@ var WidgetRow = React.createClass({
             <div className="row">
                 <Widget3Col />
                 <Widget3Col />
-                <Widget6Col />
+                <Widget3Col />
+                <Widget3Col />
             </div>
             
         );

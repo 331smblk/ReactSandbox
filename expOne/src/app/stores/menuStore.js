@@ -2,14 +2,21 @@
 
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
+var _ = require('lodash');
+var menuDataService = require('../services/menuDataService');
+
 var constants = require('../flux/constants');
 var dispatcher = require('../flux/dispatcher');
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-var menuData = {
-
+var menuData = { 
+    items: menuDataService.mainNavigationItems,
+    sideNavToggled: true
 };
+
+menuData.items[0].active = true;
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -30,10 +37,19 @@ var menuStore = assign({}, EventEmitter.prototype, {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+var toggleSideNav = function () {
+    menuData.sideNavToggled = !menuData.sideNavToggled;
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
  dispatcher.register(function (action) {
     //console.log(action);
     switch (action.actionType) {
         case constants.eventNames.INITIALIZE_APPLICATION:
+            break;
+        case constants.eventNames.SIDE_NAV_TOGGLE:
+            toggleSideNav();
             break;
     }
     menuStore.emitChange();
@@ -41,4 +57,4 @@ var menuStore = assign({}, EventEmitter.prototype, {
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-module.exports = applicationStore;
+module.exports = menuStore;
