@@ -26,7 +26,6 @@ var Application = React.createClass({
     },
     composeClass: function() {
         return this.state.menuData.sideNavToggled ? '' : 'toggled' ;
-        
     },
     render: function() {
         
@@ -35,7 +34,7 @@ var Application = React.createClass({
                 <TopNavigation menuData={this.state.menuData} />
                 <div className="container-fluid">
                     <SideBar menuData={this.state.menuData}  activeTopNavItemName={this.getRoutes()[1].name} />
-                    <BodyContent />
+                    <BodyContent menuData={this.state.menuData}  activeTopNavItemName={this.getRoutes()[1].name}/>
                 </div>
                 <FootContent />
             </div>

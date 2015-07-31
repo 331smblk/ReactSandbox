@@ -35857,7 +35857,7 @@ module.exports = {
 
     }
 };
-},{"../flux/constants":230,"../flux/dispatcher":231}],204:[function(require,module,exports){
+},{"../flux/constants":233,"../flux/dispatcher":234}],204:[function(require,module,exports){
 'use strict';
 
     var React = require('react');
@@ -35872,7 +35872,7 @@ module.exports = {
         React.render(React.createElement(Handler, null), document.getElementById('wrapper'));
     });
 
-},{"./components/application.js":205,"./routes":232,"react":202,"react-router":33}],205:[function(require,module,exports){
+},{"./components/application.js":205,"./routes":235,"react":202,"react-router":33}],205:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -35901,7 +35901,6 @@ var Application = React.createClass({displayName: "Application",
     },
     composeClass: function() {
         return this.state.menuData.sideNavToggled ? '' : 'toggled' ;
-        
     },
     render: function() {
         
@@ -35910,7 +35909,7 @@ var Application = React.createClass({displayName: "Application",
                 React.createElement(TopNavigation, {menuData: this.state.menuData}), 
                 React.createElement("div", {className: "container-fluid"}, 
                     React.createElement(SideBar, {menuData: this.state.menuData, activeTopNavItemName: this.getRoutes()[1].name}), 
-                    React.createElement(BodyContent, null)
+                    React.createElement(BodyContent, {menuData: this.state.menuData, activeTopNavItemName: this.getRoutes()[1].name})
                 ), 
                 React.createElement(FootContent, null)
             )
@@ -35919,13 +35918,15 @@ var Application = React.createClass({displayName: "Application",
 });
 
 module.exports = Application;
-},{"../stores/menuStore":234,"./bodyContent":206,"./footContent":211,"./navigation/sidebar":216,"./navigation/topNavigation":217,"react":202,"react-router":33}],206:[function(require,module,exports){
+},{"../stores/menuStore":237,"./bodyContent":206,"./footContent":211,"./navigation/sidebar":218,"./navigation/topNavigation":219,"react":202,"react-router":33}],206:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
 var _ = require('lodash');
 var RouteHandler = require('react-router').RouteHandler;
-
+var menuActions = require('../actions/menuActions');
+var menuStore = require('../stores/menuStore');
+var BreadCrumbs = require('./navigation/breadCrumbs');
 var PageContentTop = require('./pageContentTop');
 
 var BodyContent = React.createClass({displayName: "BodyContent",
@@ -35934,6 +35935,7 @@ var BodyContent = React.createClass({displayName: "BodyContent",
         return (
             
             React.createElement("div", {id: "page-content-wrapper"}, 
+                React.createElement(BreadCrumbs, {menuData: this.props.menuData}), 
                 React.createElement(RouteHandler, null)
             )
             
@@ -35942,27 +35944,7 @@ var BodyContent = React.createClass({displayName: "BodyContent",
 });
 
 module.exports = BodyContent;
-},{"./pageContentTop":218,"lodash":7,"react":202,"react-router":33}],207:[function(require,module,exports){
-'use strict';
-
-var React = require('react');
-
-var BreadCrumbs = React.createClass({displayName: "BreadCrumbs",
-
-    render: function() {
-        return (
-            React.createElement("div", {className: "row"}, 
-                React.createElement("ol", {className: "breadcrumb"}, 
-                    React.createElement("li", null, React.createElement("a", {href: "#"}, "CRM")), 
-                    React.createElement("li", null, React.createElement("a", {href: "#"}, "CRM Dashboard"))
-                )
-            )
-        );
-    }
-});
-
-module.exports = BreadCrumbs;
-},{"react":202}],208:[function(require,module,exports){
+},{"../actions/menuActions":203,"../stores/menuStore":237,"./navigation/breadCrumbs":215,"./pageContentTop":220,"lodash":7,"react":202,"react-router":33}],207:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -35980,6 +35962,25 @@ var CampaignMain = React.createClass ({displayName: "CampaignMain",
 });
 
 module.exports = CampaignMain;
+
+},{"react":202}],208:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+
+var CRMCalendar = React.createClass ({displayName: "CRMCalendar",
+    render: function() {
+        return (
+            
+            React.createElement("div", {className: ""}, 
+                React.createElement("h2", null, "CRM Calendar")
+            )
+            
+        );
+    }
+});
+
+module.exports = CRMCalendar;
 
 },{"react":202}],209:[function(require,module,exports){
 'use strict';
@@ -36069,9 +36070,7 @@ var Link = Router.Link;
 var MainNavigationItem = React.createClass({displayName: "MainNavigationItem",
     
     render: function() {
-        
-        var isActive = this.props.menuItem.active ? 'active' : '' ;
-        
+
         return (
 
             React.createElement("li", null, 
@@ -36084,6 +36083,74 @@ var MainNavigationItem = React.createClass({displayName: "MainNavigationItem",
 
 module.exports = MainNavigationItem;
 },{"react":202,"react-router":33}],214:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+var Router = require('react-router');
+
+var menuActions = require('../../actions/menuActions');
+
+var Link = Router.Link;
+
+
+var BreadCrumbItem = React.createClass({displayName: "BreadCrumbItem",
+
+    render: function() {
+        return (
+            
+            React.createElement("li", null, 
+                 React.createElement(Link, {to: this.props.menuItem.routeName, className: ""},  this.props.menuItem.name)
+            )
+            
+        );
+    }
+});
+
+module.exports = BreadCrumbItem;
+},{"../../actions/menuActions":203,"react":202,"react-router":33}],215:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+var _ = require('lodash');
+var Router = require('react-router');
+
+var BreadCrumbItem = require('./breadCrumbItem');
+
+var BreadCrumbs = React.createClass({displayName: "BreadCrumbs",
+    
+    mixins: [ Router.State ],
+    
+    sideNavToggle: function(){
+        menuActions.sideNavToggle();
+    },
+
+    render: function() {
+        
+        console.log(this.getRoutes());
+        
+        return (
+            
+            React.createElement("div", {className: "row"}, 
+                React.createElement("span", {className: "hamburger-toggle pull-left", onClick: this.sideNavToggle}, 
+                    React.createElement("i", {className: "fa fa-bars"})
+                ), 
+            
+                React.createElement("ol", {className: "breadcrumb pull-left"}, 
+            
+                    this.props.menuData.items.map(function(menuItem, index) {
+                        return (
+                            React.createElement(BreadCrumbItem, {key: index, menuItem: menuItem})
+                        );
+                    })
+    
+                )
+            )
+        );
+    }
+});
+
+module.exports = BreadCrumbs;
+},{"./breadCrumbItem":214,"lodash":7,"react":202,"react-router":33}],216:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36108,7 +36175,7 @@ var MainNavigation = React.createClass({displayName: "MainNavigation",
 });
 
 module.exports = MainNavigation;
-},{"./MainNavigationItem":213,"react":202}],215:[function(require,module,exports){
+},{"./MainNavigationItem":213,"react":202}],217:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36129,7 +36196,7 @@ var SideBarItem = React.createClass({displayName: "SideBarItem",
 
 module.exports = SideBarItem;
 
-},{"react":202,"react-router":33}],216:[function(require,module,exports){
+},{"react":202,"react-router":33}],218:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36165,23 +36232,17 @@ var SideBar = React.createClass({displayName: "SideBar",
 
 module.exports = SideBar;
 
-},{"./sideNavItem":215,"lodash":7,"react":202}],217:[function(require,module,exports){
+},{"./sideNavItem":217,"lodash":7,"react":202}],219:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
 
 var MainNavigation = require('./mainNavigation');
-var menuActions = require('../../actions/menuActions');
+
 var TopNavigation = React.createClass({displayName: "TopNavigation",
 
-    
-    sideNavToggle: function(){
-        menuActions.sideNavToggle();
-    },
     render: function() {
-        
-        //console.log(this.props.menuData);
-        
+
         return (
             React.createElement("nav", {className: "navbar navbar-default navbar-fixed-top navbar-1", role: "navigation"}, 
                 React.createElement("div", {className: "container-fluid"}, 
@@ -36193,7 +36254,7 @@ var TopNavigation = React.createClass({displayName: "TopNavigation",
                             React.createElement("span", {className: "icon-bar"}), 
                             React.createElement("span", {className: "icon-bar"})
                         ), 
-                        React.createElement("span", {className: "navbar-brand", onClick: this.sideNavToggle}, React.createElement("img", {className: "vin-logo", src: 'img/Vin_logo_white_188w.png'}))
+                        React.createElement("span", {className: "navbar-brand"}, React.createElement("img", {className: "vin-logo", src: 'img/Vin_logo_white_188w.png'}))
                     ), 
 
 
@@ -36229,11 +36290,11 @@ var TopNavigation = React.createClass({displayName: "TopNavigation",
 });
 
 module.exports = TopNavigation;
-},{"../../actions/menuActions":203,"./mainNavigation":214,"react":202}],218:[function(require,module,exports){
+},{"./mainNavigation":216,"react":202}],220:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
-var BreadCrumbs = require('./breadCrumbs');
+var BreadCrumbs = require('./navigation/breadCrumbs');
 var WidgetRow = require('./widgets/widgetRow');
 var WidgetRowMini = require('./widgets/widgetRowMini');
 
@@ -36255,7 +36316,7 @@ var PageContentTop = React.createClass({displayName: "PageContentTop",
 });
 
 module.exports = PageContentTop;
-},{"./breadCrumbs":207,"./widgets/widgetRow":228,"./widgets/widgetRowMini":229,"react":202}],219:[function(require,module,exports){
+},{"./navigation/breadCrumbs":215,"./widgets/widgetRow":231,"./widgets/widgetRowMini":232,"react":202}],221:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36274,7 +36335,26 @@ var ReportingMain = React.createClass ({displayName: "ReportingMain",
 
 module.exports = ReportingMain;
 
-},{"react":202}],220:[function(require,module,exports){
+},{"react":202}],222:[function(require,module,exports){
+'use strict';
+
+var React = require('react');
+
+var ServiceCalendar = React.createClass ({displayName: "ServiceCalendar",
+    render: function() {
+        return (
+            
+            React.createElement("div", {className: ""}, 
+                React.createElement("h2", null, "Service Calendar")
+            )
+            
+        );
+    }
+});
+
+module.exports = ServiceCalendar;
+
+},{"react":202}],223:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36293,7 +36373,7 @@ var ServiceMain = React.createClass ({displayName: "ServiceMain",
 
 module.exports = ServiceMain;
 
-},{"react":202}],221:[function(require,module,exports){
+},{"react":202}],224:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36312,7 +36392,7 @@ var WebsitesMain = React.createClass ({displayName: "WebsitesMain",
 
 module.exports = WebsitesMain;
 
-},{"react":202}],222:[function(require,module,exports){
+},{"react":202}],225:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36333,7 +36413,7 @@ var Widget3Col = React.createClass({displayName: "Widget3Col",
 });
 
 module.exports = Widget3Col;
-},{"./widgetContainer":224,"react":202}],223:[function(require,module,exports){
+},{"./widgetContainer":227,"react":202}],226:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36356,7 +36436,7 @@ var Widget6Col = React.createClass({displayName: "Widget6Col",
 
 module.exports = Widget6Col;
 
-},{"./widgetContainer":224,"react":202}],224:[function(require,module,exports){
+},{"./widgetContainer":227,"react":202}],227:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36379,7 +36459,7 @@ var WidgetContainer = React.createClass({displayName: "WidgetContainer",
 });
 
 module.exports = WidgetContainer;
-},{"./widgetContainerContent":225,"./widgetContainerHeader":226,"react":202}],225:[function(require,module,exports){
+},{"./widgetContainerContent":228,"./widgetContainerHeader":229,"react":202}],228:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36410,7 +36490,7 @@ var WidgetContainerContent = React.createClass({displayName: "WidgetContainerCon
 });
 
 module.exports = WidgetContainerContent;
-},{"react":202}],226:[function(require,module,exports){
+},{"react":202}],229:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36450,7 +36530,7 @@ var WidgetContainerHeader = React.createClass({displayName: "WidgetContainerHead
 });
 
 module.exports = WidgetContainerHeader;
-},{"react":202}],227:[function(require,module,exports){
+},{"react":202}],230:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36472,7 +36552,7 @@ var WidgetMini2Col = React.createClass({displayName: "WidgetMini2Col",
 });
 
 module.exports = WidgetMini2Col;
-},{"react":202}],228:[function(require,module,exports){
+},{"react":202}],231:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36496,7 +36576,7 @@ var WidgetRow = React.createClass({displayName: "WidgetRow",
 });
 
 module.exports = WidgetRow;
-},{"./widget3Col":222,"./widget6Col":223,"react":202}],229:[function(require,module,exports){
+},{"./widget3Col":225,"./widget6Col":226,"react":202}],232:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36523,7 +36603,7 @@ var WidgetRowMini = React.createClass({displayName: "WidgetRowMini",
 });
 
 module.exports = WidgetRowMini;
-},{"./widgetMini2Col":227,"react":202}],230:[function(require,module,exports){
+},{"./widgetMini2Col":230,"react":202}],233:[function(require,module,exports){
 
 'use strict';
 
@@ -36538,13 +36618,13 @@ module.exports = {
     eventNames: eventNames,
     changeEventListener: 'change'
 };  
-},{"keymirror":6}],231:[function(require,module,exports){
+},{"keymirror":6}],234:[function(require,module,exports){
 'use strict';
 
 var Dispatcher = require('flux').Dispatcher;
 
 module.exports = new Dispatcher();  
-},{"flux":3}],232:[function(require,module,exports){
+},{"flux":3}],235:[function(require,module,exports){
 'use strict';
 
 var React = require('react');
@@ -36563,18 +36643,27 @@ var NotFoundRoute = Router.NotFoundRoute;
 module.exports = (
     React.createElement(Route, {name: "app", path: "/", handler: require('./components/application')}, 
 
-        React.createElement(DefaultRoute, {name: "crm", handler: require('./components/crm/crmMain')}), 
-                      
-        React.createElement(Route, {name: "campaigns", handler: require('./components/campaigns/campaignsMain')}), 
-        React.createElement(Route, {name: "desking", handler: require('./components/desking/deskingMain')}), 
-        React.createElement(Route, {name: "inventory", handler: require('./components/inventory/inventoryMain')}), 
-        React.createElement(Route, {name: "reporting", handler: require('./components/reporting/reportingMain')}), 
-        React.createElement(Route, {name: "service", handler: require('./components/service/serviceMain')}), 
-        React.createElement(Route, {name: "websites", handler: require('./components/websites/websitesMain')})
+        React.createElement(DefaultRoute, {name: "AppDefault", handler: require('./components/crm/crmDashboard')}), 
+                                                      
+        React.createElement(Route, {name: "crm", path: "/crm", handler: require('./components/crm/crmDashboard')}, 
+            React.createElement(Route, {name: "CRM Calendar", path: "/crm/calendar", handler: require('./components/crm/crmCalendar')})
+        ), 
+                                                      
+                  
+        React.createElement(Route, {name: "campaigns", path: "/campaigns", handler: require('./components/campaigns/campaignsDashboard')}), 
+        React.createElement(Route, {name: "desking", path: "/desking", handler: require('./components/desking/deskingDashboard')}), 
+        React.createElement(Route, {name: "inventory", path: "/inventory", handler: require('./components/inventory/inventoryDashboard')}), 
+        React.createElement(Route, {name: "reporting", path: "/reporting", handler: require('./components/reporting/reportingDashboard')}), 
+        React.createElement(Route, {name: "service", path: "/service", handler: require('./components/service/serviceDashboard')}, 
+            React.createElement(Route, {name: "Service Calendar", path: "/service/calendar", handler: require('./components/service/serviceCalendar')})
+        ), 
+        React.createElement(Route, {name: "websites", path: "/websites", handler: require('./components/websites/websitesDashboard')})
 
+        
+        
     )
 );
-},{"./components/application":205,"./components/campaigns/campaignsMain":208,"./components/crm/crmMain":209,"./components/desking/deskingMain":210,"./components/inventory/inventoryMain":212,"./components/reporting/reportingMain":219,"./components/service/serviceMain":220,"./components/websites/websitesMain":221,"react":202,"react-router":33}],233:[function(require,module,exports){
+},{"./components/application":205,"./components/campaigns/campaignsDashboard":207,"./components/crm/crmCalendar":208,"./components/crm/crmDashboard":209,"./components/desking/deskingDashboard":210,"./components/inventory/inventoryDashboard":212,"./components/reporting/reportingDashboard":221,"./components/service/serviceCalendar":222,"./components/service/serviceDashboard":223,"./components/websites/websitesDashboard":224,"react":202,"react-router":33}],236:[function(require,module,exports){
 'use strict'
 
 module.exports = {
@@ -36736,7 +36825,7 @@ module.exports = {
     ] 
 };
 
-},{}],234:[function(require,module,exports){
+},{}],237:[function(require,module,exports){
 'use strict';
 
 var EventEmitter = require('events').EventEmitter;
@@ -36798,4 +36887,4 @@ var toggleSideNav = function () {
 
 module.exports = menuStore;
 
-},{"../flux/constants":230,"../flux/dispatcher":231,"../services/menuDataService":233,"events":1,"lodash":7,"object-assign":8}]},{},[204]);
+},{"../flux/constants":233,"../flux/dispatcher":234,"../services/menuDataService":236,"events":1,"lodash":7,"object-assign":8}]},{},[204]);

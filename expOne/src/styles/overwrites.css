@@ -175,3 +175,7 @@ ul.unstyled {
 .modal-dialog {
     width:768px;
 }
+
+.hamburger-toggle {
+    padding:8px 15px;
+}

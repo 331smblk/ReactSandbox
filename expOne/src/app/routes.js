@@ -16,14 +16,23 @@ var NotFoundRoute = Router.NotFoundRoute;
 module.exports = (
     <Route name="app" path="/" handler={require('./components/application')}>
 
-        <DefaultRoute name="crm" handler={require('./components/crm/crmMain')} />
-                      
-        <Route name="campaigns" handler={require('./components/campaigns/campaignsMain')} /> 
-        <Route name="desking" handler={require('./components/desking/deskingMain')} />    
-        <Route name="inventory" handler={require('./components/inventory/inventoryMain')} />    
-        <Route name="reporting" handler={require('./components/reporting/reportingMain')} />    
-        <Route name="service" handler={require('./components/service/serviceMain')} />    
-        <Route name="websites" handler={require('./components/websites/websitesMain')} />  
+        <DefaultRoute name="AppDefault" handler={require('./components/crm/crmDashboard')} />
+                                                      
+        <Route name="crm" path="/crm" handler={require('./components/crm/crmDashboard')} >
+            <Route name="CRM Calendar" path="/crm/calendar" handler={require('./components/crm/crmCalendar')} />        
+        </Route>                                           
+                                                      
+                  
+        <Route name="campaigns" path="/campaigns" handler={require('./components/campaigns/campaignsDashboard')} /> 
+        <Route name="desking" path="/desking" handler={require('./components/desking/deskingDashboard')} />    
+        <Route name="inventory" path="/inventory" handler={require('./components/inventory/inventoryDashboard')} />    
+        <Route name="reporting" path="/reporting"handler={require('./components/reporting/reportingDashboard')} />    
+        <Route name="service" path="/service" handler={require('./components/service/serviceDashboard')}>
+            <Route name="Service Calendar" path="/service/calendar" handler={require('./components/service/serviceCalendar')} />        
+        </Route>    
+        <Route name="websites" path="/websites" handler={require('./components/websites/websitesDashboard')} />  
 
+        
+        
     </Route>
 );

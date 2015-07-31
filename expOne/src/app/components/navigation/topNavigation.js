@@ -3,17 +3,11 @@
 var React = require('react');
 
 var MainNavigation = require('./mainNavigation');
-var menuActions = require('../../actions/menuActions');
+
 var TopNavigation = React.createClass({
 
-    
-    sideNavToggle: function(){
-        menuActions.sideNavToggle();
-    },
     render: function() {
-        
-        //console.log(this.props.menuData);
-        
+
         return (
             <nav className="navbar navbar-default navbar-fixed-top navbar-1" role="navigation">
                 <div className="container-fluid">
@@ -25,7 +19,7 @@ var TopNavigation = React.createClass({
                             <span className="icon-bar"></span>
                             <span className="icon-bar"></span>
                         </button>
-                        <span className="navbar-brand" onClick={this.sideNavToggle}><img className="vin-logo" src={'img/Vin_logo_white_188w.png'} /></span>
+                        <span className="navbar-brand"><img className="vin-logo" src={'img/Vin_logo_white_188w.png'} /></span>
                     </div>
 
 

@@ -8,9 +8,7 @@ var Link = Router.Link;
 var MainNavigationItem = React.createClass({
     
     render: function() {
-        
-        var isActive = this.props.menuItem.active ? 'active' : '' ;
-        
+
         return (
 
             <li>

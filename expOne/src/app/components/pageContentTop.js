@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var BreadCrumbs = require('./breadCrumbs');
+var BreadCrumbs = require('./navigation/breadCrumbs');
 var WidgetRow = require('./widgets/widgetRow');
 var WidgetRowMini = require('./widgets/widgetRowMini');
 
